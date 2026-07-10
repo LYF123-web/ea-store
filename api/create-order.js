@@ -1,8 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
-
-// 内存存储（生产环境用数据库）
-const orders = new Map()
-
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
@@ -19,25 +14,16 @@ export default async function handler(req, res) {
   try {
     const { productId, productName, amount, buyerEmail } = req.body
 
-    const orderId = `EA${Date.now()}${uuidv4().slice(0, 8).toUpperCase()}`
+    // 生成订单号
+    const orderId = 'EA' + Date.now() + Math.random().toString(36).slice(2, 8).toUpperCase()
 
-    orders.set(orderId, {
-      id: orderId,
-      productId,
-      productName,
-      amount: parseFloat(amount),
-      buyerEmail,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    })
+    console.log('订单已创建:', orderId, productName, amount)
 
-    console.log(`📦 订单已创建: ${orderId} - ${productName} - ¥${amount}`)
-
-    // 模拟支付模式（Vercel部署用）
+    // 返回模拟支付URL
     res.json({
       success: true,
       orderId,
-      paymentUrl: `/pay/${orderId}`,
+      paymentUrl: '/pay/' + orderId,
       mode: 'mock',
     })
   } catch (error) {
