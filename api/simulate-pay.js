@@ -1,3 +1,4 @@
+// Vercel Serverless Function - ES Module
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
@@ -9,10 +10,10 @@ export default async function handler(req, res) {
 
   try {
     const { orderId } = req.body
-    console.log('模拟支付成功:', orderId)
+    console.log('Simulate pay success:', orderId)
 
-    res.json({ success: true, message: '模拟支付成功' })
+    return res.status(200).json({ success: true, message: '模拟支付成功' })
   } catch (error) {
-    res.status(500).json({ success: false, message: '支付失败' })
+    return res.status(500).json({ success: false, message: '支付失败' })
   }
 }

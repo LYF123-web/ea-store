@@ -1,3 +1,4 @@
+// Vercel Serverless Function - ES Module
 export default async function handler(req, res) {
-  res.json({ status: 'ok', time: new Date().toISOString() })
+  return res.status(200).json({ status: 'ok', time: new Date().toISOString() })
 }
