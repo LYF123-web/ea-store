@@ -2,8 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { BannerAd, FeedAd, SidebarAd, FooterAd } from './AdBanner'
 
-// API地址
-const API_BASE = '/api'
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api'
 
 function App() {
   const [activeTab, setActiveTab] = useState('home')

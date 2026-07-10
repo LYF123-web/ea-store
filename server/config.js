@@ -21,16 +21,7 @@ export default {
 
   returnUrl: process.env.ALIPAY_RETURN_URL || 'http://localhost:5173/pay-result',
 
-  // 从环境变量读取密钥
-  privateKey: process.env.ALIPAY_PRIVATE_KEY || '',
-
-  alipayPublicKey: process.env.ALIPAY_PUBLIC_KEY || '',
-
-  // 兼容从文件读取（开发环境）
   getPrivateKey() {
-    if (this.privateKey) {
-      return this.privateKey.replace(/\\n/g, '\n')
-    }
     try {
       return fs.readFileSync(path.join(__dirname, 'certs/app_private_key.pem'), 'ascii')
     } catch {
@@ -39,9 +30,6 @@ export default {
   },
 
   getAlipayPublicKey() {
-    if (this.alipayPublicKey) {
-      return this.alipayPublicKey.replace(/\\n/g, '\n')
-    }
     try {
       return fs.readFileSync(path.join(__dirname, 'certs/alipay_public_key.pem'), 'ascii')
     } catch {
