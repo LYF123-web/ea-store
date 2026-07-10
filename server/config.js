@@ -1,22 +1,51 @@
-// 支付宝配置文件
-export default {
-  // 应用ID（APPID）
-  appId: '2021006170687735',
+import dotenv from 'dotenv'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-  // 网关地址（正式环境）
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+// 加载环境变量
+dotenv.config({ path: path.join(__dirname, '.env') })
+
+// 支付宝配置
+export default {
+  appId: process.env.ALIPAY_APP_ID || '2021006170687735',
+
   gateway: 'https://openapi.alipay.com/gateway.do',
 
-  // 签名类型
   signType: 'RSA2',
 
-  // 回调地址（支付宝支付成功后通知你的服务器）
-  // 测试时用localhost，正式环境需要换成公网域名
-  notifyUrl: 'http://wanfeng.com/api/alipay/notify',
+  notifyUrl: process.env.ALIPAY_NOTIFY_URL || 'http://localhost:3001/api/alipay/notify',
 
-  // 支付完成后的跳转地址
-  returnUrl: 'http://wanfeng.com/pay-result',
+  returnUrl: process.env.ALIPAY_RETURN_URL || 'http://localhost:5173/pay-result',
 
-  // 密钥文件路径
-  privateKeyPath: './certs/app_private_key.pem',
-  alipayPublicKeyPath: './certs/alipay_public_key.pem',
+  // 从环境变量读取密钥
+  privateKey: process.env.ALIPAY_PRIVATE_KEY || '',
+
+  alipayPublicKey: process.env.ALIPAY_PUBLIC_KEY || '',
+
+  // 兼容从文件读取（开发环境）
+  getPrivateKey() {
+    if (this.privateKey) {
+      return this.privateKey.replace(/\\n/g, '\n')
+    }
+    try {
+      return fs.readFileSync(path.join(__dirname, 'certs/app_private_key.pem'), 'ascii')
+    } catch {
+      return ''
+    }
+  },
+
+  getAlipayPublicKey() {
+    if (this.alipayPublicKey) {
+      return this.alipayPublicKey.replace(/\\n/g, '\n')
+    }
+    try {
+      return fs.readFileSync(path.join(__dirname, 'certs/alipay_public_key.pem'), 'ascii')
+    } catch {
+      return ''
+    }
+  },
 }

@@ -26,13 +26,10 @@ let AlipayFormData = null
 
 async function initAlipay() {
   try {
-    const privateKeyPath = path.join(__dirname, config.privateKeyPath)
-    const publicKeyPath = path.join(__dirname, config.alipayPublicKeyPath)
+const privateKey = config.getPrivateKey()
+    const publicKey = config.getAlipayPublicKey()
 
-    const privateKey = fs.readFileSync(privateKeyPath, 'ascii')
-    const publicKey = fs.readFileSync(publicKeyPath, 'ascii')
-
-    if (privateKey.includes('PLACEHOLDER') || privateKey.includes('请在这里') || publicKey.includes('PLACEHOLDER') || publicKey.includes('请在这里')) {
+    if (!privateKey || !publicKey) {
       console.log('⚠️  支付宝密钥未配置，使用模拟支付模式')
       return false
     }
