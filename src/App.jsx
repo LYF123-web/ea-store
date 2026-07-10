@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { BannerAd, FeedAd, SidebarAd, FooterAd } from './AdBanner'
 
-// API地址（部署后前后端同域）
+// API地址
 const API_BASE = '/api'
 
 function App() {
